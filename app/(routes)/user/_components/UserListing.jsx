@@ -28,15 +28,15 @@ const UserListing = () => {
     <div>
         <h2 className='font-bold text-2xl'>Manage Your listing</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-            {listing&&listing.map((item,index)=>{
-                <div
+            {listing&&listing.map((item,index)=>(
+                <div 
                 className='p-3 hover:border hover:border-[#7f57f1] cursor-pointer rounded-lg'
                 key={index}>
                 <h2 className='bg-primary m-1 rounded-lg text-white absolute px-2 text-sm p-1 '>{item.active?'published':'Draft'}</h2>
                 <Image
                   src={item?.listingImages[0]?
                   item?.listingImages[0]?.url
-                  :'/placeholder.png'
+                  :'/placeholder.jpg'
                 }
                   width={800}
                   height={150}
@@ -76,7 +76,7 @@ const UserListing = () => {
                   </div>
                 </div>
               </div>
-            })}
+            ))}
         </div>
     </div>
   )

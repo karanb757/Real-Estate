@@ -65,8 +65,8 @@ function MarkerItem({ item }) {
           }}
           onClick={() => setSelectedListing(item)}
           icon={{
-            url: '/gps.jpg',
-            scaledSize: new window.google.maps.Size(60, 60),
+            url: '/pin.png',
+            scaledSize: new window.google.maps.Size(30, 30),
           }}
         />
       )}

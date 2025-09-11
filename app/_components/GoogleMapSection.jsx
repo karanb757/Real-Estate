@@ -63,7 +63,7 @@
 // export default GoogleMapSection;
 
 import React, { useCallback, useState } from 'react';
-import { GoogleMap, useJsApiLoader,Marker } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api'
 import MarkerItem from './MarkerItem';
 
 const containerStyle = {
@@ -72,8 +72,8 @@ const containerStyle = {
 };
 
 const center = {
-  lat: -34.5920611,
-  lng: -58.42538589999999,
+  lat: 28.65103546524678,
+  lng: 77.16368940432166
 };
 
 function GoogleMapSection({ coordinates, listing }) {
@@ -86,10 +86,8 @@ function GoogleMapSection({ coordinates, listing }) {
   const [map, setMap] = useState(null);
 
   const onLoad = useCallback((map) => {
-    if (window.google) {
-      const bounds = new window.google.maps.LatLngBounds(center);
-      map.fitBounds(bounds);
-    }
+    // Remove the fitBounds call that was overriding your zoom level
+    // Just set the map reference
     setMap(map);
   }, []);
 
@@ -105,13 +103,13 @@ function GoogleMapSection({ coordinates, listing }) {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={12}
+        zoom={4} // This will now work as expected
         onLoad={onLoad}
         onUnmount={onUnmount}
         gestureHandling='greedy'
       >
         {listing?.map((item, index) => (
-          <MarkerItem key={index} item={item} />
+          <MarkerItem key={item.id || index} item={item} />
         ))}
         {coordinates && <Marker position={coordinates} />}
       </GoogleMap>
@@ -120,4 +118,3 @@ function GoogleMapSection({ coordinates, listing }) {
 }
 
 export default GoogleMapSection;
-

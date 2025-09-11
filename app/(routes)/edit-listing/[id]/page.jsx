@@ -116,84 +116,161 @@ const EditListing = ({ params }) => {
 // };
 
     
-  const onSubmitHandler = async (formValue) => {
-      const cleanedValues = Object.fromEntries(
-          Object.entries(formValue).map(([key, val]) => {
-            if (val === "") return [key, null];
-            if (!isNaN(val) && val !== null) return [key, Number(val)];
-            return [key, val];
-          })
-        );
+  // const onSubmitHandler = async (formValue) => {
+  //     const cleanedValues = Object.fromEntries(
+  //         Object.entries(formValue).map(([key, val]) => {
+  //           if (val === "") return [key, null];
+  //           if (!isNaN(val) && val !== null) return [key, Number(val)];
+  //           return [key, val];
+  //         })
+  //       );
       
-        // First update other fields
-        const { data, error } = await supabase
-          .from("listing")
-          .update(cleanedValues)
-          .eq("id", id)
-          .select();
+  //       // First update other fields
+  //       const { data, error } = await supabase
+  //         .from("listing")
+  //         .update(cleanedValues)
+  //         .eq("id", id)
+  //         .select();
       
-        if (error) {
-          console.error("Update error:", error);
-          toast.error("Something went wrong!");
-          return;
-        }
+  //       if (error) {
+  //         console.error("Update error:", error);
+  //         toast.error("Something went wrong!");
+  //         return;
+  //       }
       
-        // Upload images with user context
-        const userEmail = user?.primaryEmailAddress?.emailAddress;
+  //       // Upload images with user context
+  //       const userEmail = user?.primaryEmailAddress?.emailAddress;
         
-        for (const file of images) {
-          const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-          const fileExt = file.name.split(".").pop();
+  //       for (const file of images) {
+  //         const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  //         const fileExt = file.name.split(".").pop();
           
-          // Upload to storage
-          const { data: uploadData, error: uploadErr } = await supabase.storage
-            .from("listingImages")
-            .upload(`${fileName}`,file, {
-              contentType: `image/${fileExt}`,
-              upsert: false,
-            });
+  //         // Upload to storage
+  //         const { data: uploadData, error: uploadErr } = await supabase.storage
+  //           .from("listingImages")
+  //           .upload(`${fileName}`,file, {
+  //             contentType: `image/${fileExt}`,
+  //             upsert: false,
+  //           });
       
-          if (uploadErr) {
-            console.error("Upload error:", uploadErr);
-            toast.error("Error while uploading images");
-            continue; // Skip this image and continue with others
-          }
+  //         if (uploadErr) {
+  //           console.error("Upload error:", uploadErr);
+  //           toast.error("Error while uploading images");
+  //           continue; // Skip this image and continue with others
+  //         }
       
-          // Get public URL
-          const { data: { publicUrl } } = supabase
-            .storage
-            .from("listingImages")
-            .getPublicUrl(`${fileName}.${fileExt}`);
+  //         // Get public URL
+  //         const { data: { publicUrl } } = supabase
+  //           .storage
+  //           .from("listingImages")
+  //           .getPublicUrl(`${fileName}.${fileExt}`);
       
-          // Insert into listingImages table with user context
-          const { error: insertErr } = await supabase
-            .from("listingImages")
-            .insert([
-              { 
-                url: publicUrl, 
-                listing_id: id,
-                created_by: userEmail, // Add user context
-                created_at: new Date().toISOString()
-              }
-            ]);
+  //         // Insert into listingImages table with user context
+  //         const { error: insertErr } = await supabase
+  //           .from("listingImages")
+  //           .insert([
+  //             { 
+  //               url: publicUrl, 
+  //               listing_id: id,
+  //               created_by: userEmail, // Add user context
+  //               created_at: new Date().toISOString()
+  //             }
+  //           ]);
       
-          if (insertErr) {
-            console.error("Image DB insert error:", insertErr);
-            toast.error("Error while saving image info in DB");
-          } 
+  //         if (insertErr) {
+  //           console.error("Image DB insert error:", insertErr);
+  //           toast.error("Error while saving image info in DB");
+  //         } 
           
-          else {
-            console.log("Image inserted into DB:", publicUrl);
-          }
-        }
+  //         else {
+  //           console.log("Image inserted into DB:", publicUrl);
+  //         }
+  //       }
       
-        if (data) {
-          console.log("Updated data:", data);
-          toast.success("Listing updated and Published");
-        }
+  //       if (data) {
+  //         console.log("Updated data:", data);
+  //         toast.success("Listing updated and Published");
+  //       }
+  // };
+
+  const onSubmitHandler = async (formValue) => {
+    const cleanedValues = Object.fromEntries(
+      Object.entries(formValue).map(([key, val]) => {
+        if (val === "") return [key, null];
+        if (!isNaN(val) && val !== null) return [key, Number(val)];
+        return [key, val];
+      })
+    );
+  
+    // First update other fields
+    const { data, error } = await supabase
+      .from("listing")
+      .update(cleanedValues)
+      .eq("id", id)
+      .select();
+  
+    if (error) {
+      console.error("Update error:", error);
+      toast.error("Something went wrong!");
+      return;
+    }
+  
+    // Upload images with user context
+    const userEmail = user?.primaryEmailAddress?.emailAddress;
+    
+    for (const file of images) {
+      const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const fileExt = file.name.split(".").pop();
+      const fullFileName = `${fileName}.${fileExt}`; // ✅ Consistent naming
+      
+      // Upload to storage
+      const { data: uploadData, error: uploadErr } = await supabase.storage
+        .from("listingImages")
+        .upload(fullFileName, file, { // ✅ Use full filename with extension
+          contentType: `image/${fileExt}`,
+          upsert: false,
+        });
+  
+      if (uploadErr) {
+        console.error("Upload error:", uploadErr);
+        toast.error("Error while uploading images");
+        continue;
+      }
+  
+      // Get public URL using the same filename
+      const { data: { publicUrl } } = supabase
+        .storage
+        .from("listingImages")
+        .getPublicUrl(fullFileName); // ✅ Use same filename
+  
+      console.log("Generated public URL:", publicUrl); // ✅ Debug log
+  
+      // Insert into listingImages table
+      const { error: insertErr } = await supabase
+        .from("listingImages")
+        .insert([
+          { 
+            url: publicUrl, 
+            listing_id: parseInt(id), // ✅ Ensure it's an integer
+            created_by: userEmail,
+            created_at: new Date().toISOString()
+          }
+        ]);
+  
+      if (insertErr) {
+        console.error("Image DB insert error:", insertErr);
+        toast.error("Error while saving image info in DB");
+      } else {
+        console.log("Image successfully inserted into DB:", publicUrl);
+      }
+    }
+  
+    if (data) {
+      console.log("Updated data:", data);
+      toast.success("Listing updated and Published");
+    }
   };
   
-      
   return (
     <div className="px-10 md:px-36">
       <h2 className="font-bold text-2xl">

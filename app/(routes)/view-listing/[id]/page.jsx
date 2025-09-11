@@ -1,6 +1,6 @@
 "use client"
-import { supabase } from '@/Utils/supabase/client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { supabase } from '../../../../Utils/supabase/client'
 import { toast } from 'sonner'
 import Slider from './_components/Slider'
 import Details from './_components/Details'
@@ -20,10 +20,15 @@ const ViewListing = ({params}) => {
         .eq('id',params.id)
         .eq('active',true)
 
-        if(data){
-            setListingDetail(data)
-            console.log(data);
+        // if(data){
+        //     setListingDetail(data)
+        //     console.log(data);
             
+        // }
+
+        if(data && data.length > 0){
+            setListingDetail(data[0])  // Get first item from array
+            console.log(data[0]);
         }
 
         if(error){

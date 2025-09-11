@@ -1,4 +1,5 @@
 import React from 'react'
+import ListingMapView from '../../_components/ListingMapView'
 
 const ForRent = () => {
   return (

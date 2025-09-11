@@ -5,7 +5,8 @@ import {
     CarouselItem,
     CarouselNext,
     CarouselPrevious,
-  } from "@/components/ui/carousel"
+  } from "../../../../../@/components/ui/carousel"
+import Image from 'next/image'
 
 const Slider = ({imageList}) => {
 
@@ -17,15 +18,17 @@ const Slider = ({imageList}) => {
     <Carousel>
   <CarouselContent>
     {imageList.map((item,index)=>{
-        <CarouselItem>
-            <Img 
-            src={item.url}
-            height={300}
-            width={800}
-            alt='image'
-            className='rounded-xl object-cover h-[300px] w-full '
+       {imageList?.map((item,index)=>(
+        <CarouselItem key={index}>
+            <Image 
+                src={item.url}
+                height={300}
+                width={800}
+                alt='image'
+                className='rounded-xl object-cover h-[300px] w-full '
             />
         </CarouselItem>
+    ))}
     })}
   </CarouselContent>
   <CarouselPrevious />
