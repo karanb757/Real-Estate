@@ -61,7 +61,7 @@ const EditListing = ({ params }) => {
     const {data,error}=await supabase
     .from('listing')
     .update({active:true})
-    .eq('id',params?.id)
+    .eq('id', id)   // ✅ use unwrapped id
     .select()
 
     if(data){
@@ -271,6 +271,7 @@ const EditListing = ({ params }) => {
     }
   };
   
+
   return (
     <div className="px-10 md:px-36">
       <h2 className="font-bold text-2xl">

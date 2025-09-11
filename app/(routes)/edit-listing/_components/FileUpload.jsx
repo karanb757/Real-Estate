@@ -4,13 +4,19 @@ import React, { useState } from 'react'
 const FileUpload = ({setImages}) => {
 
     const [imagePreview,setImagePreview]=useState([])
-    const handleFileUpload = (event)=>{
-        const files = event.target.files;
-        console.log(files)
-        setImages(files)
-        const previews=Array.from(files).map((file)=>URL.createObjectURL(file))
-        setImagePreview(previews)
-    }
+    // const handleFileUpload = (event)=>{
+    //     const files = event.target.files;
+    //     console.log(files)
+    //     setImages(files)
+    //     const previews=Array.from(files).map((file)=>URL.createObjectURL(file))
+    //     setImagePreview(previews)
+    // }
+    const handleFileUpload = (event) => {
+        const files = event.target.files ? Array.from(event.target.files) : [];
+        setImages(files); // ✅ replace previous images
+        const previews = files.map((file) => URL.createObjectURL(file));
+        setImagePreview(previews);
+    };
  
   return (
     <div>
