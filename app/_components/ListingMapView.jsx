@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { supabase } from "../../Utils/supabase/client.js"
-import Listing from './Listing.jsx'
+import Listing from './Lisitng.jsx'
 import { toast } from 'sonner'
 import GoogleMapSection from './GoogleMapSection.jsx'
 
@@ -51,7 +51,9 @@ function ListingMapView({type}) {
           console.log('Fetched data:', data); // ✅ Add this
           setListing(data);
         }
-      } catch (err) {
+      } 
+      
+      catch (err) {
         console.error('Unexpected error:', err);
         toast('Something went wrong!');
       }

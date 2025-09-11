@@ -64,7 +64,7 @@ function Listing({
                 key={index}
               >
                 <Image
-                  src={item.listingImages[0]?.url || '/placeholder.jpg'}
+                  src={item.listingImages[0]?.url}
                   width={800}
                   height={150}
                   className='rounded-lg object-cover h-[170px]'

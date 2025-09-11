@@ -1,6 +1,6 @@
 // import React, { useState } from 'react'
 // import { MarkerF, OverlayView } from '@react-google-maps/api'
-// import MarketListingItem from './MarkerListingItem'
+// import MarkerListingItem from './MarkerListingItem'
 
 // function MarkerItem({item}) {
 //     const [selectedListing,setSelectedListing]=useState()
@@ -30,7 +30,7 @@
 //         mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
 //         >
 //             <div>
-//                 <MarketListingItem 
+//                 <MarkerListingItem 
 //                 closeHandler={()=>setSelectedListing(null)}
 //                 item={selectedListing}/>
 //             </div>
@@ -45,7 +45,7 @@
 
 import React, { useState } from 'react'
 import { MarkerF, OverlayView } from '@react-google-maps/api'
-import MarketListingItem from './MarkerListingItem'
+import MarkerListingItem from './MarkerListingItem'
 
 function MarkerItem({ item }) {
   const [selectedListing, setSelectedListing] = useState(null)
@@ -65,7 +65,7 @@ function MarkerItem({ item }) {
           }}
           onClick={() => setSelectedListing(item)}
           icon={{
-            url: '/gps.png',
+            url: '/gps.jpg',
             scaledSize: new window.google.maps.Size(60, 60),
           }}
         />
@@ -77,7 +77,7 @@ function MarkerItem({ item }) {
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
         >
           <div>
-            <MarketListingItem
+            <MarkerListingItem
               closeHandler={() => setSelectedListing(null)}
               item={selectedListing}
             />

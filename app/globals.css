@@ -121,3 +121,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.cl-internal-rx251b{
+  box-shadow: none;
+}

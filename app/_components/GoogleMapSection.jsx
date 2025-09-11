@@ -63,7 +63,7 @@
 // export default GoogleMapSection;
 
 import React, { useCallback, useState } from 'react';
-import { GoogleMap, useJsApiLoader,Marker } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader,Marker } from '@react-google-maps/api'
 import MarkerItem from './MarkerItem';
 
 const containerStyle = {
@@ -105,7 +105,7 @@ function GoogleMapSection({ coordinates, listing }) {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={10}
+        zoom={12}
         onLoad={onLoad}
         onUnmount={onUnmount}
         gestureHandling='greedy'

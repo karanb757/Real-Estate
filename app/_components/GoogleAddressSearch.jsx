@@ -6,7 +6,7 @@ import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 
 function GoogleAddressSearch({selectedAddress,setCoordinates}) {
   return (
-    <div className="flex items-center w-full">
+    <div className="flex items-center w-full ">
       <MapPin className="h-10 w-10 p-2 rounded-l-lg text-[#7f57f1] bg-purple-300" />
       
       <GooglePlacesAutocomplete
