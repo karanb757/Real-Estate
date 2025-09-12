@@ -59,7 +59,7 @@ function Listing({
           ? listing.map((item, index) => (
               <Link href={'/view-listing/' + item.id} key={index}>
                 <div className='p-3 hover:border hover:border-[#7f57f1] cursor-pointer rounded-lg'>
-                {console.log('Listing Image URL:', item.listingImages?.[0]?.url)}
+                {/* {console.log('Listing Image URL:', item.listingImages?.[0]?.url)} */}
                 <Image
                 src={
                     item.listingImages?.[0]?.url ||
