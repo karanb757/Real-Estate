@@ -22,8 +22,6 @@ function GoogleMapSection({ coordinates, listing }) {
   const [map, setMap] = useState(null);
 
   const onLoad = useCallback((map) => {
-    // Remove the fitBounds call that was overriding your zoom level
-    // Just set the map reference
     setMap(map);
   }, []);
 
@@ -35,14 +33,14 @@ function GoogleMapSection({ coordinates, listing }) {
   if (loadError) return <p>Error loading Google Maps API: {loadError.message}</p>;
 
   return (
-    <div>
+    <div className="h-full w-full rounded-2xl overflow-hidden shadow-lg border border-gray-300 dark:border-gray-700">
       <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={4} // This will now work as expected
+        mapContainerStyle={{ width: "100%", height: "100%" }}
+        center={coordinates || { lat: 28.65103546524678, lng: 77.16368940432166 }}
+        zoom={coordinates ? 14 : 4}
         onLoad={onLoad}
         onUnmount={onUnmount}
-        gestureHandling='greedy'
+        gestureHandling="greedy"
       >
         {listing?.map((item, index) => (
           <MarkerItem key={item.id || index} item={item} />

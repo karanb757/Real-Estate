@@ -7,6 +7,11 @@ const nextConfig = {
           hostname: 'eldtlfazltepgsunjgxj.supabase.co',
           pathname: '/storage/v1/object/public/listingImages/**',
         },
+        {
+          protocol: 'https',
+          hostname: 'img.clerk.com',
+          pathname: '/**',
+        },
       ],
     },
   };

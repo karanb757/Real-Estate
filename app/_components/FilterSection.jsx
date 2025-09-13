@@ -73,9 +73,6 @@ function FilterSection({setBedCount,setBathCount,setParkCount,setHomeType}) {
                     <CarFront className='h-5 w-5 text-[#7f57f1]'/> 3+
                 </h2>
             </SelectItem>
-
-
-        
         </SelectContent>
         </Select>
 
@@ -84,8 +81,8 @@ function FilterSection({setBedCount,setBathCount,setParkCount,setHomeType}) {
             <SelectValue placeholder="Home Type" />
         </SelectTrigger>
         <SelectContent>
-            <SelectItem value="Single Family Home">
-                Single Family Home
+            <SelectItem value="Single Family House">
+                Single Family House
             </SelectItem>
             <SelectItem value="Town House">
                 Town House

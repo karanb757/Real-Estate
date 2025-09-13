@@ -18,10 +18,8 @@ import { toast } from 'sonner'
 import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import FileUpload from '../_components/FileUpload.jsx'
-import { Loader } from 'lucide-react'
 
 const EditListing = ({ params }) => {
-  // ✅ unwrap params (Next.js App Router provides params as a promise)
   const { id } = use(params)
   const { user } = useUser()
   const router = useRouter()
@@ -41,7 +39,7 @@ const EditListing = ({ params }) => {
       .from("listing")
       .select("*")
       .eq("createdBy", userEmail)
-      .eq("id", id) // ✅ use unwrapped id
+      .eq("id", id)
 
     if(data){
         setListing(data[0])
@@ -57,246 +55,130 @@ const EditListing = ({ params }) => {
     }
   }
 
-  const publishBtnHandler=async()=>{
-    const {data,error}=await supabase
-    .from('listing')
-    .update({active:true})
-    .eq('id', id)   // ✅ use unwrapped id
-    .select()
+  const onSubmitAndPublishHandler = async (formValue) => {
+    try {
+      // Step 1: Clean and prepare form values
+      const cleanedValues = Object.fromEntries(
+        Object.entries(formValue).map(([key, val]) => {
+          if (val === "") return [key, null];
+          if (!isNaN(val) && val !== null) return [key, Number(val)];
+          return [key, val];
+        })
+      );
 
-    if(data){
-      toast('listing Published Successfully !')
-    }
-  }
+      // Step 2: Update listing with form data and set active to true
+      const { data, error } = await supabase
+        .from("listing")
+        .update({
+          ...cleanedValues,
+          active: true // Publish immediately
+        })
+        .eq("id", id)
+        .select();
 
-//   const onSubmitHandler = async (formValue) => {
-//   // 🔹 Clean values: convert "" → null, numeric strings → numbers
-//   const cleanedValues = Object.fromEntries(
-//     Object.entries(formValue).map(([key, val]) => {
-//       if (val === "") return [key, null];              // empty string → null
-//       if (!isNaN(val) && val !== null) return [key, Number(val)]; // numeric string → number
-//       return [key, val];
-//     })
-//   );
-
-//   const { data, error } = await supabase
-//     .from("listing")
-//     .update(cleanedValues) // ✅ use cleaned values
-//     .eq("id", id)
-//     .select();
-
-//   if (error) {
-//     console.error("Update error:", error);
-//     toast.error("Something went wrong!");
-//     return;
-//   }
-
-//   if (data) {
-//     console.log("Updated data:", data);
-//     toast.success("Listing updated and Published");
-//   }
-
-//   // 🔹 Upload images after updating listing
-//   for (const file of images) {
-//     const fileName = Date.now().toString();
-//     const fileExt = file.name.split(".").pop();
-//     const { data: uploadData, error: uploadErr } = await supabase.storage
-//       .from("listingImages")
-//       .upload(`${fileName}.${fileExt}`, file, {
-//         contentType: file.type,
-//         upsert: false,
-//       });
-
-//     if (uploadErr) {
-//       toast.error("Error while uploading images");
-//     } else {
-//       console.log("Image uploaded:", uploadData);
-//     }
-//   }
-// };
-
-    
-  // const onSubmitHandler = async (formValue) => {
-  //     const cleanedValues = Object.fromEntries(
-  //         Object.entries(formValue).map(([key, val]) => {
-  //           if (val === "") return [key, null];
-  //           if (!isNaN(val) && val !== null) return [key, Number(val)];
-  //           return [key, val];
-  //         })
-  //       );
-      
-  //       // First update other fields
-  //       const { data, error } = await supabase
-  //         .from("listing")
-  //         .update(cleanedValues)
-  //         .eq("id", id)
-  //         .select();
-      
-  //       if (error) {
-  //         console.error("Update error:", error);
-  //         toast.error("Something went wrong!");
-  //         return;
-  //       }
-      
-  //       // Upload images with user context
-  //       const userEmail = user?.primaryEmailAddress?.emailAddress;
-        
-  //       for (const file of images) {
-  //         const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  //         const fileExt = file.name.split(".").pop();
-          
-  //         // Upload to storage
-  //         const { data: uploadData, error: uploadErr } = await supabase.storage
-  //           .from("listingImages")
-  //           .upload(`${fileName}`,file, {
-  //             contentType: `image/${fileExt}`,
-  //             upsert: false,
-  //           });
-      
-  //         if (uploadErr) {
-  //           console.error("Upload error:", uploadErr);
-  //           toast.error("Error while uploading images");
-  //           continue; // Skip this image and continue with others
-  //         }
-      
-  //         // Get public URL
-  //         const { data: { publicUrl } } = supabase
-  //           .storage
-  //           .from("listingImages")
-  //           .getPublicUrl(`${fileName}.${fileExt}`);
-      
-  //         // Insert into listingImages table with user context
-  //         const { error: insertErr } = await supabase
-  //           .from("listingImages")
-  //           .insert([
-  //             { 
-  //               url: publicUrl, 
-  //               listing_id: id,
-  //               created_by: userEmail, // Add user context
-  //               created_at: new Date().toISOString()
-  //             }
-  //           ]);
-      
-  //         if (insertErr) {
-  //           console.error("Image DB insert error:", insertErr);
-  //           toast.error("Error while saving image info in DB");
-  //         } 
-          
-  //         else {
-  //           console.log("Image inserted into DB:", publicUrl);
-  //         }
-  //       }
-      
-  //       if (data) {
-  //         console.log("Updated data:", data);
-  //         toast.success("Listing updated and Published");
-  //       }
-  // };
-
-  const onSubmitHandler = async (formValue) => {
-    const cleanedValues = Object.fromEntries(
-      Object.entries(formValue).map(([key, val]) => {
-        if (val === "") return [key, null];
-        if (!isNaN(val) && val !== null) return [key, Number(val)];
-        return [key, val];
-      })
-    );
-  
-    // First update other fields
-    const { data, error } = await supabase
-      .from("listing")
-      .update(cleanedValues)
-      .eq("id", id)
-      .select();
-  
-    if (error) {
-      console.error("Update error:", error);
-      toast.error("Something went wrong!");
-      return;
-    }
-  
-    // Upload images with user context
-    const userEmail = user?.primaryEmailAddress?.emailAddress;
-    
-    for (const file of images) {
-      const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      const fileExt = file.name.split(".").pop();
-      const fullFileName = `${fileName}.${fileExt}`; // ✅ Consistent naming
-      
-      // Upload to storage
-      const { data: uploadData, error: uploadErr } = await supabase.storage
-        .from("listingImages")
-        .upload(fullFileName, file, { // ✅ Use full filename with extension
-          contentType: `image/${fileExt}`,
-          upsert: false,
-        });
-  
-      if (uploadErr) {
-        console.error("Upload error:", uploadErr);
-        toast.error("Error while uploading images");
-        continue;
+      if (error) {
+        console.error("Update error:", error);
+        toast.error("Something went wrong!");
+        return;
       }
-  
-      // Get public URL using the same filename
-      const { data: { publicUrl } } = supabase
-        .storage
-        .from("listingImages")
-        .getPublicUrl(fullFileName); // ✅ Use same filename
-  
-      console.log("Generated public URL:", publicUrl); // ✅ Debug log
-  
-      // Insert into listingImages table
-      const { error: insertErr } = await supabase
-        .from("listingImages")
-        .insert([
-          { 
-            url: publicUrl, 
-            listing_id: parseInt(id), // ✅ Ensure it's an integer
-            created_by: userEmail,
-            created_at: new Date().toISOString()
+
+      // Step 3: Upload images if any
+      const userEmail = user?.primaryEmailAddress?.emailAddress;
+      
+      if (images.length > 0) {
+        for (const file of images) {
+          const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          const fileExt = file.name.split(".").pop();
+          const fullFileName = `${fileName}.${fileExt}`;
+          
+          // Upload to storage
+          const { data: uploadData, error: uploadErr } = await supabase.storage
+            .from("listingImages")
+            .upload(fullFileName, file, {
+              contentType: `image/${fileExt}`,
+              upsert: false,
+            });
+
+          if (uploadErr) {
+            console.error("Upload error:", uploadErr);
+            toast.error("Error while uploading images");
+            continue;
           }
-        ]);
-  
-      if (insertErr) {
-        console.error("Image DB insert error:", insertErr);
-        toast.error("Error while saving image info in DB");
-      } else {
-        console.log("Image successfully inserted into DB:", publicUrl);
+
+          // Get public URL
+          const { data: { publicUrl } } = supabase
+            .storage
+            .from("listingImages")
+            .getPublicUrl(fullFileName);
+
+          // Insert into listingImages table
+          const { error: insertErr } = await supabase
+            .from("listingImages")
+            .insert([
+              { 
+                url: publicUrl, 
+                listing_id: parseInt(id),
+                created_by: userEmail,
+                created_at: new Date().toISOString()
+              }
+            ]);
+
+          if (insertErr) {
+            console.error("Image DB insert error:", insertErr);
+            toast.error("Error while saving image info in DB");
+          }
+        }
       }
-    }
-  
-    if (data) {
-      console.log("Updated data:", data);
-      toast.success("Listing updated and Published");
+
+      // Step 4: Show success message and redirect immediately
+      if (data && data.length > 0) {
+        toast.success("Listing Published Successfully!");
+        
+        const type = data[0]?.type;
+        
+        // Redirect immediately based on type
+        if (type === "Rent") {
+          router.push("/rent");
+        } else if (type === "Sell") {
+          router.push("/for-sell");
+        } else {
+          router.push("/");
+        }
+      }
+
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toast.error("Something went wrong!");
     }
   };
-  
 
   return (
-    <div className="px-10 md:px-36">
-      <h2 className="font-bold text-2xl">
+    <div className="px-10 md:px-36 pt-26">
+      <div className='flex justify-center pb-10'>
+      <h2 className="font-medium text-2xl">
         Enter some more details about your listing
       </h2>
+      </div>
 
       <Formik
         initialValues={{
-          type: "",
-          propertyType: "",
-          bedroom: "",
-          bathroom: "",
-          builtIn: "",
-          parking: "",
-          lotSize: "",
-          area: "",
-          sellingPrice: "", // ✅ consistent lowercase with form
-          hoa: "",
-          description: "",
-          profileImage:user?.imageUrl,
-          fullName:user?.fullName,
+          type: listing?.type || "",
+          propertyType: listing?.propertyType || "",
+          bedroom: listing?.bedroom || "",
+          bathroom: listing?.bathroom || "",
+          builtIn: listing?.builtIn || "",
+          parking: listing?.parking || "",
+          lotSize: listing?.lotSize || "",
+          area: listing?.area || "",
+          sellingPrice: listing?.sellingPrice || "",
+          hoa: listing?.hoa || "",
+          description: listing?.description || "",
+          profileImage: user?.imageUrl,
+          fullName: user?.fullName,
         }}
+        enableReinitialize={true}
         onSubmit={(values) => {
-          console.log("Form submit:", values) // ✅ cleaner log
-          onSubmitHandler(values)
+          onSubmitAndPublishHandler(values)
         }}
       >
         {({ values, handleChange, handleSubmit, setFieldValue }) => (
@@ -306,8 +188,8 @@ const EditListing = ({ params }) => {
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg text-slate-500">Rent or Sell ?</h2>
                   <RadioGroup
-                    defaultValue={listing?.type}
-                    onValueChange={(v) => values.type=v}
+                    value={values.type}
+                    onValueChange={(v) => setFieldValue('type', v)}
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="Rent" id="Rent" />
@@ -323,12 +205,11 @@ const EditListing = ({ params }) => {
                 <div className="flex flex-col gap-2">
                   <h2 className="text-md text-slate-500">Property Type</h2>
                   <Select
-                    onValueChange={(e) => values.propertyType=e}
-                    name='propertyType'
-                    defaultValue={listing?.propertyType}
+                    value={values.propertyType}
+                    onValueChange={(value) => setFieldValue('propertyType', value)}
                   >
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder={listing?.propertyType?listing?.propertyType:"Select Property Type"} />
+                      <SelectValue placeholder="Select Property Type" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Single Family House">Single Family House</SelectItem>
@@ -346,7 +227,6 @@ const EditListing = ({ params }) => {
                   <Input
                     type="number"
                     placeholder="Ex: 2"
-                    defaultValue={listing?.bedroom}
                     name="bedroom"
                     value={values.bedroom}
                     onChange={handleChange}
@@ -357,7 +237,6 @@ const EditListing = ({ params }) => {
                   <Input
                     type="number"
                     placeholder="Ex: 2"
-                    defaultValue={listing?.bathroom}
                     name="bathroom"
                     value={values.bathroom}
                     onChange={handleChange}
@@ -367,8 +246,7 @@ const EditListing = ({ params }) => {
                   <h2>Built In</h2>
                   <Input
                     type="number"
-                    placeholder="Ex: 1800 sq.ft"
-                    defaultValue={listing?.builtIn}
+                    placeholder="Ex: Yr-2021"
                     name="builtIn"
                     value={values.builtIn}
                     onChange={handleChange}
@@ -383,7 +261,6 @@ const EditListing = ({ params }) => {
                   <Input
                     type="number"
                     placeholder="Ex: 2"
-                    defaultValue={listing?.parking}
                     name="parking"
                     value={values.parking}
                     onChange={handleChange}
@@ -394,7 +271,6 @@ const EditListing = ({ params }) => {
                   <Input
                     type="number"
                     placeholder="Ex: 1200 sq.ft"
-                    defaultValue={listing?.lotSize}
                     name="lotSize"
                     value={values.lotSize}
                     onChange={handleChange}
@@ -405,7 +281,6 @@ const EditListing = ({ params }) => {
                   <Input
                     type="number"
                     placeholder="EX: 1800 sq.ft"
-                    defaultValue={listing?.area}
                     name="area"
                     value={values.area}
                     onChange={handleChange}
@@ -420,7 +295,6 @@ const EditListing = ({ params }) => {
                   <Input
                     type="number"
                     placeholder="Ex: 3000000"
-                    defaultValue={listing?.sellingPrice}
                     name="sellingPrice"
                     value={values.sellingPrice}
                     onChange={handleChange}
@@ -431,7 +305,6 @@ const EditListing = ({ params }) => {
                   <Input
                     type="number"
                     placeholder="Ex: 5000"
-                    defaultValue={listing?.hoa}
                     name="hoa"
                     value={values.hoa}
                     onChange={handleChange}
@@ -444,7 +317,6 @@ const EditListing = ({ params }) => {
                 <h2 className="text-gray-500">Description</h2>
                 <Textarea
                   placeholder="Enter description..."
-                  defaultValue={listing?.description}
                   name="description"
                   value={values.description}
                   onChange={handleChange}
@@ -458,13 +330,8 @@ const EditListing = ({ params }) => {
 
               {/* Buttons */}
               <div className="flex gap-4 mt-6 justify-end">
-                <Button type="submit" className="flex gap-2 text-[#7f57f1] bg-white border border-[#7f57f1]">
-                  Save
-                </Button>
-                <Button 
-                type="submit" className="flex gap-2 bg-[#7f57f1]"
-                onClick={()=>publishBtnHandler()}>
-                 Save & Publish
+                <Button type="submit" className="flex gap-2 bg-[#7f57f1]">
+                  Save & Publish
                 </Button>
               </div>
             </div>
@@ -476,4 +343,3 @@ const EditListing = ({ params }) => {
 }
 
 export default EditListing
-
