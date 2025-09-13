@@ -144,7 +144,7 @@ const UserListing = () => {
                                 <Link href={'/edit-listing/' + item.id} className='w-full'> 
                                     <Button size='sm' className='w-full'>Edit</Button>
                                 </Link>
-                                <Button size='sm' variant='destructive' className='w-full flex gap-1'>
+                                <Button size='sm' variant='destructive' className='flex gap-1'>
                                     <Trash className='h-4 w-4'/>
                                     Delete
                                 </Button>

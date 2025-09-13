@@ -20,7 +20,7 @@ function Listing({
   return (
     <div>
       {/* Search Bar */}
-      <div className="p-3 flex gap-6">
+      {/* <div className="p-3 flex gap-6">
         <GoogleAddressSearch
           selectedAddress={(v) => {
             searchedAddress(v);
@@ -32,7 +32,7 @@ function Listing({
           <Search className="h-4 w-4" />
           Search
         </Button>
-      </div>
+      </div> */}
 
       {/* Filters */}
       <FilterSection
