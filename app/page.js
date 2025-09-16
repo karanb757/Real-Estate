@@ -248,7 +248,7 @@ const page = () => {
           </div>
           
           <div className="border-t border-gray-800 dark:border-gray-700 mt-8 pt-8 text-center transition-colors duration-300">
-            <p className="text-gray-400 dark:text-gray-500 transition-colors duration-300">&copy; 2024 PropertyHub. All rights reserved.</p>
+            <p className="text-gray-400 dark:text-gray-500 transition-colors duration-300">&copy; 2024 FindMyPG. All rights reserved.</p>
           </div>
         </div>
       </footer>
