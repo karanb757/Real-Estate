@@ -19,21 +19,6 @@ function Listing({
 
   return (
     <div>
-      {/* Search Bar */}
-      {/* <div className="p-3 flex gap-6">
-        <GoogleAddressSearch
-          selectedAddress={(v) => {
-            searchedAddress(v);
-            setAddress(v);
-          }}
-          setCoordinates={(v) => console.log(v)}
-        />
-        <Button className="flex gap-2 bg-[#7f57f1]" onClick={handleSearchClick}>
-          <Search className="h-4 w-4" />
-          Search
-        </Button>
-      </div> */}
-
       {/* Filters */}
       <FilterSection
         setBathCount={setBathCount}

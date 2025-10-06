@@ -77,13 +77,13 @@ ${formData.name}
   }
 
   return (
-    <div className='flex gap-5 items-center justify-between p-5 rounded-lg shadow-md border my-6'>
-      <div className='flex items-center gap-6'>
+    <div className='flex gap-5 items-center justify-between p-2 xl:p-4 lg:p-4 rounded-lg shadow-md border my-6'>
+      <div className='flex items-center gap-2 xl:gap-6 lg:gap-6'>
       <Image 
       src={listingDetail?.profileImage || '/user.png'}
       alt="Profile"
-      width={40}
-      height={40}
+      width={30}
+      height={30}
       className="rounded-full object-cover"
     />
         <div>
@@ -99,15 +99,15 @@ ${formData.name}
         <DialogTrigger asChild>
           <Button className='flex gap-2 dark:bg-white'>
             <Mail className='h-4 w-4 ' />
-            <h2 className='dark:text-black'>
-            Contact Property Owner
+            <h2 className='dark:text-black text-xs'>
+            Contact
             </h2>
           </Button>
         </DialogTrigger>
         
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Contact Property Owner</DialogTitle>
+            <DialogTitle>Contact Owner</DialogTitle>
           </DialogHeader>
           
           <form onSubmit={handleSendEmail} className="space-y-4">

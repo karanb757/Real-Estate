@@ -129,55 +129,110 @@ function ListingMapView({ type }) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div>
+      {/* Desktop: Side by side layout */}
+      <div className="hidden md:grid md:grid-cols-2 md:gap-8">
+        {/* Listings Column */}
         <div>
-        <div className="flex items-center gap-2 mb-4 ml-2">
-        <input
+          <div className="flex items-center gap-2 mb-4 ml-2">
+            <input
+              type="text"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              placeholder="Search by address..."
+              className="border rounded-lg px-3 py-2 w-full dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            />
+            <button
+              onClick={handleSearchClick}
+              className="flex items-center gap-2 px-4 py-2 bg-[#7f57f1] text-white rounded-lg hover:bg-[#6a45d8] transition"
+            >
+              <Search className="h-4 w-4" />
+              Search
+            </button>
+
+            {isSearchActive && (
+              <button
+                onClick={handleClearSearch}
+                className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
+          {listing.length > 0 ? (
+            <Listing
+              listing={listing}
+              setBathCount={setBathCount}
+              setBedCount={setBedCount}
+              setParkCount={setParkCount}
+              setHomeType={setHomeType}
+            />
+          ) : (
+            <div className="text-center text-gray-500 mt-10">
+              Sorry! No such listing found
+            </div>
+          )}
+        </div>
+
+        {/* Map Column - Fixed on Desktop */}
+        <div className="fixed right-2 h-5/6 w-1/2 lg:w-[600px] xl:w-[660px] pr-4 pt-3">
+          <GoogleMapSection listing={listing} coordinates={coordinates} />
+        </div>
+      </div>
+
+      {/* Mobile: Listings first, then map below */}
+      <div className="md:hidden">
+        {/* Search Bar */}
+        <div className="flex items-center gap-2 mb-4 px-2">
+          <input
             type="text"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             placeholder="Search by address..."
-            className="border rounded-lg px-3 py-2 w-full"
-        />
-        <button
+            className="border rounded-lg px-3 py-2 w-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-sm"
+          />
+          <button
             onClick={handleSearchClick}
-            className="flex items-center gap-2 px-4 py-2 bg-[#7f57f1] text-white rounded-lg hover:bg-[#6a45d8] transition"
-        >
+            className="flex items-center gap-1 px-3 py-2 bg-[#7f57f1] text-white rounded-lg hover:bg-[#6a45d8] transition"
+          >
             <Search className="h-4 w-4" />
-            Search
-        </button>
+          </button>
 
-        {isSearchActive && (
+          {isSearchActive && (
             <button
-            onClick={handleClearSearch}
-            className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition"
+              onClick={handleClearSearch}
+              className="px-3 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition text-sm"
             >
-            Clear
+              Clear
             </button>
-        )}
+          )}
         </div>
 
+        {/* Listings Section */}
         {listing.length > 0 ? (
-        <Listing
+          <Listing
             listing={listing}
             setBathCount={setBathCount}
             setBedCount={setBedCount}
             setParkCount={setParkCount}
             setHomeType={setHomeType}
-        />
+          />
         ) : (
-        <div className="text-center text-gray-500 mt-10">
-            Sorry ! No such listing found
-        </div>
-         )}
-      </div>
+          <div className="text-center text-gray-500 dark:text-gray-400 mt-10 px-4">
+            Sorry! No such listing found
+          </div>
+        )}
 
-      <div className="fixed right-2 h-5/6 w-full sm:w-2/3 md:w-1/2 lg:w-[600px] xl:w-[660px] pr-4 pt-3">
-        <GoogleMapSection listing={listing} coordinates={coordinates} />
+        {/* Map Section - Below listings on mobile */}
+        <div className="mt-8 px-2 pb-6">
+          <div className="h-[620px] rounded-lg overflow-hidden shadow-lg p-2">
+            <GoogleMapSection listing={listing} coordinates={coordinates} />
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 export default ListingMapView;
-

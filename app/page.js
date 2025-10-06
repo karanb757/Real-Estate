@@ -45,38 +45,37 @@ const page = () => {
     <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300">
 
   {/* Main Hero Section */}
-  <section className="relative min-h-screen flex items-center">
-  {/* Background decorative shapes */}
-  <div className="absolute inset-0 opacity-5 dark:opacity-10">
-    <div className="absolute top-20 left-20 w-32 h-32 border border-gray-400 dark:border-gray-600 rounded-lg rotate-12"></div>
-    <div className="absolute top-40 right-32 w-24 h-24 border border-gray-400 dark:border-gray-600 rounded-full"></div>
-    <div className="absolute bottom-40 left-1/4 w-28 h-28 border border-gray-400 dark:border-gray-600 rotate-45"></div>
-  </div>
-
+  <section className="relative min-h-screen md:flex md:items-center pt-24 md:pt-0">
+  
   {/* City skyline image at bottom */}
   <div className="absolute bottom-0 w-full z-0 flex justify-center ">
-    <img 
+    {/* <img 
       src="./building5.png" 
       alt="city skyline" 
-      className="h-[520px] w-[1300px] translate-y-24"
+      className="h-[520px] w-[1300px] translate-y-0 md:translate-y-24 lg:translate-y-24 xl:translate-y-24"
+    /> */}
+    <img 
+    src="./building5.png" 
+    alt="city skyline" 
+    className="h-[390px] w-[600px] md:h-[520px] md:w-[1300px] translate-y-0 pb-24 sm:pb-0 md:pb-0 lg:pb-0 xl:pb-0 md:translate-y-24 lg:translate-y-24 xl:translate-y-24"
     />
   </div>
 
   {/* Hero content */}
-  <div className="container mx-auto px-6 lg:px-8 z-10 ">
+  <div className="container mx-auto px-2 lg:px-8 xl:lg:px-8 z-10 ">
     <div className="max-w-4xl mx-auto text-center">
       {/* Main heading */}
       <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight transition-colors duration-300">
         Property Solutions
-        <span className="block text-[#7F57F1] text-4xl lg:text-6xl mt-2">
+        <span className="block text-[#7F57F1] text-4xl lg:text-6xl xl:text-6xl mt-2">
           Made Simple
         </span>
       </h1>
       
-      <p className="text-xl lg:text-2xl text-gray-700 dark:text-gray-300 mb-4 font-medium transition-colors duration-300">
+      <p className="text-md lg:text-2xl xl:text-2xl text-gray-700 dark:text-gray-300 mb-4 font-medium transition-colors duration-300">
         Connecting tenants, buyers, and property owners across India
       </p>
-      <p className="text-md text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto transition-colors duration-300">
+      <p className="text-md lg:text-md xl:text-md  text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto transition-colors duration-300">
         Whether you need a PG room, family apartment, or investment property, 
         we provide verified listings with complete transparency.
       </p>

@@ -3,6 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+
+
 :root {
   background-color: white;
   --radius: 0.625rem;
@@ -124,4 +127,48 @@
 
 .cl-internal-rx251b{
   box-shadow: none;
+}
+
+/* === Clerk Google Button Center Fix === */
+.cl-socialButtonsRoot,
+.cl-socialButtons,
+.cl-socialButtonsBlock,
+[class*="socialButtonsRoot"],
+[class*="socialButtons"],
+[class*="socialButtonsBlock"] {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  gap: 0.5rem !important;
+}
+
+.cl-socialButtonsRoot[style*="display: grid"],
+.cl-socialButtons[style*="display: grid"],
+[class*="socialButtons"][style*="display: grid"] {
+  display: flex !important;
+}
+
+.cl-socialButtonsBlockButton,
+button[class*="socialButtonsBlockButton"],
+button[class*="google"],
+button[aria-label*="Google"],
+button[title*="Google"] {
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: auto !important;
+  max-width: 60px !important;
+  margin: 0 auto !important;
+  padding-left: 0.6rem !important;
+  padding-right: 0.6rem !important;
+}
+
+.cl-socialButtonsBlockButton .cl-socialButtonsBlockButtonText__google,
+.cl-socialButtonsBlockButton span,
+.cl-socialButtonsBlockButton img,
+.cl-socialButtonsBlockButton svg {
+  display: block !important;
+  margin: 0 auto !important;
+  text-align: center !important;
 }
